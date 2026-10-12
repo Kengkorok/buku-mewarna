@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ffd6e7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Buku Mewarna</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <header id="bar">
+    <button id="btn-back" class="ico" title="Kembali" hidden>‹</button>
+    <h1 id="title">Buku Mewarna</h1>
+    <span id="hint" class="hint"></span>
+    <div class="grow"></div>
+    <button id="btn-undo" class="ico" title="Undo">↶</button>
+    <button id="btn-redo" class="ico" title="Redo">↷</button>
+    <button id="btn-sound" class="ico" title="Bunyi">🔊</button>
+  </header>
+
+  <!-- GALLERY -->
+  <main id="gallery">
+    <nav id="cats"></nav>
+    <div id="grid"></div>
+  </main>
+
+  <!-- COLORING -->
+  <main id="stagewrap" hidden>
+    <div id="stage">
+      <div id="art-holder"></div>
+      <canvas id="brush"></canvas>
+      <div id="effects"></div>
+    </div>
+    <div id="tools">
+      <div class="toolrow">
+        <button class="tbtn on" data-tool="fill" title="Isi warna">🪣</button>
+        <button class="tbtn" data-tool="brush" title="Berus">🖌️</button>
+        <button class="tbtn" data-tool="eraser" title="Padam">🧽</button>
+        <span class="sep"></span>
+        <input id="size" type="range" min="6" max="46" value="16" title="Saiz berus">
+        <span class="sep"></span>
+        <button class="tbtn" id="btn-magic" title="Warna auto">✨</button>
+        <button class="tbtn" id="btn-clear" title="Kosongkan">🗑️</button>
+        <button class="tbtn save" id="btn-save" title="Simpan">💾</button>
+      </div>
+      <div class="palrow">
+        <div id="palette"></div>
+        <label class="picker" title="Warna sendiri">
+          <input id="custom" type="color" value="#ff4d6d">
+          <span>🎨</span>
+        </label>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" hidden></div>
+</div>
+
+<script src="pages.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

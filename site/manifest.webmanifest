@@ -1,0 +1,16 @@
+{
+  "name": "Buku Mewarna",
+  "short_name": "Mewarna",
+  "description": "Game mewarna offline untuk anak — tekan untuk warnakan, berus, mandala. Tiada iklan.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fff5fa",
+  "theme_color": "#ffd6e7",
+  "lang": "ms",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

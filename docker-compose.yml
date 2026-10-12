@@ -1,0 +1,11 @@
+services:
+  buku-mewarna:
+    build: .
+    image: buku-mewarna:latest
+    container_name: buku-mewarna
+    restart: unless-stopped
+    ports:
+      - "8450:80"
+    volumes:
+      # live-edit friendly: tukar fail dalam ./site dan refresh browser (tiada rebuild)
+      - ./site:/usr/share/nginx/html:ro

@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Ujian / screenshot tempatan
+shots/
+sheet*.png
+
+# Nota deploy sendiri (URL sebenar, jangan publish)
+README.local.md
+tools/*.bak
+
+# OS
+.DS_Store
+Thumbs.db
