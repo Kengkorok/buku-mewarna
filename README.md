@@ -26,7 +26,9 @@ Dibina sebagai alternatif kepada app "coloring page" di Play Store yang penuh ik
 git clone https://github.com/Kengkorok/buku-mewarna.git
 cd buku-mewarna
 docker compose up -d --build
-chmod -R a+rX site          # WAJIB: nginx dalam container tak boleh baca fail mode 600
+chmod -R a+rX site          # jika shell anda guna umask 077 (fail jadi 600 -> nginx 403).
+                            # Image sendiri betulkan permission bila build, tapi bind mount
+                            # membaca fail host — jadi chmod ini masih perlu.
 ```
 
 Buka `http://<IP-server>:8450`.
