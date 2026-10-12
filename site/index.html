@@ -2,67 +2,68 @@
 <html lang="ms">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#ffd6e7">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff9f2">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Buku Mewarna</title>
+<meta name="description" content="Dunia kecil penuh warna. Buku mewarna interaktif untuk anak, tanpa iklan.">
+<title>Buku Mewarna · Dunia kecil penuh warna</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css">
+<link rel="icon" href="icon.svg"><link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <div id="app">
-
   <header id="bar">
-    <button id="btn-back" class="ico" title="Kembali" hidden>‹</button>
-    <h1 id="title">Buku Mewarna</h1>
-    <span id="hint" class="hint"></span>
-    <div class="grow"></div>
-    <button id="btn-undo" class="ico" title="Undo">↶</button>
-    <button id="btn-redo" class="ico" title="Redo">↷</button>
-    <button id="btn-sound" class="ico" title="Bunyi">🔊</button>
+    <button id="btn-back" class="ico" title="Kembali ke koleksi" aria-label="Kembali ke koleksi" hidden>‹</button>
+    <span class="brand-icon" aria-hidden="true">✿</span>
+    <div class="brand"><span class="eyebrow" id="eyebrow">RUANG KREATIF SI KECIL</span><h1 id="title">Buku Mewarna<span class="brand-dot">.</span></h1></div>
+    <div class="header-actions">
+      <button id="btn-undo" class="ico color-only" title="Undur" aria-label="Undur">↶</button>
+      <button id="btn-redo" class="ico color-only" title="Ulang" aria-label="Ulang">↷</button>
+      <button id="btn-sound" class="ico" title="Tutup bunyi" aria-label="Tutup bunyi">♪</button>
+    </div>
   </header>
-
-  <!-- GALLERY -->
   <main id="gallery">
-    <nav id="cats"></nav>
+    <section class="welcome">
+      <div><span class="tag">IMAGINASI BERMULA DI SINI</span><h2>Dunia kecil,<br>penuh <span>warna.</span></h2><p>Pilih lukisan kegemaran. Jom buat sesuatu yang cantik!</p><div class="welcome-notes"><span>✦ Tanpa iklan</span><span>♡ Dibuat untuk si kecil</span></div></div>
+      <div class="hero-art" aria-hidden="true"><div class="hero-orbit"></div><div id="hero-picture"></div><span class="hero-star s1">✧</span><span class="hero-star s2">✦</span><span class="hero-scribble">warna ikut suka!</span></div>
+    </section>
+    <div class="collection-heading"><h3>Koleksi lukisan <span id="page-count"></span></h3><span class="collection-note">Satu lukisan, seribu cerita</span></div>
+    <nav id="cats" aria-label="Kategori lukisan"></nav>
     <div id="grid"></div>
+    <footer class="gallery-footer">Sedikit warna. Banyak gembira. <span>✿</span></footer>
   </main>
-
-  <!-- COLORING -->
   <main id="stagewrap" hidden>
-    <div id="stage">
-      <div id="art-holder"></div>
-      <canvas id="brush"></canvas>
-      <div id="effects"></div>
+    <div class="activity-bar"><div class="activity-tip"><span class="lock-icon">▣</span><span id="hint">Warna kekal dalam garisan</span></div><div class="progress-wrap"><span id="progress-label">0 / 0 bahagian</span><progress id="progress" value="0" max="1" aria-label="Bahagian selesai"></progress></div></div>
+    <div id="drawing-area">
+      <div id="stage" aria-label="Ruang mewarna">
+        <div id="art-holder"></div><canvas id="brush" aria-label="Kanvas berus"></canvas>
+        <div id="outline-holder" aria-hidden="true"></div><div id="effects" aria-hidden="true"></div>
+        <div id="marker" hidden aria-hidden="true"></div>
+      </div>
+      <div class="stage-caption">✦ Sentuh ruang kosong untuk warnakan latar juga!</div>
     </div>
     <div id="tools">
       <div class="toolrow">
-        <button class="tbtn on" data-tool="fill" title="Isi warna">🪣</button>
-        <button class="tbtn" data-tool="brush" title="Berus">🖌️</button>
-        <button class="tbtn" data-tool="eraser" title="Padam">🧽</button>
-        <span class="sep"></span>
-        <input id="size" type="range" min="6" max="46" value="16" title="Saiz berus">
-        <span class="sep"></span>
-        <button class="tbtn" id="btn-magic" title="Warna auto">✨</button>
-        <button class="tbtn" id="btn-clear" title="Kosongkan">🗑️</button>
-        <button class="tbtn save" id="btn-save" title="Simpan">💾</button>
+        <div class="tool-group" role="group" aria-label="Alat mewarna">
+          <button class="tbtn on" data-tool="brush" title="Berus" aria-label="Berus"><span class="tool-art" data-icon="marker"></span><span>Berus</span></button>
+          <button class="tbtn" data-tool="fill" title="Isi warna" aria-label="Isi warna"><span class="tool-art" data-icon="bucket"></span><span>Isi</span></button>
+          <button class="tbtn" data-tool="eraser" title="Pemadam" aria-label="Pemadam"><span class="tool-art" data-icon="eraser"></span><span>Padam</span></button>
+        </div>
+        <label class="size-control"><span>Saiz <b id="size-value">28</b></span><input id="size" type="range" min="8" max="64" value="28" aria-label="Saiz berus"></label>
+        <div class="tool-group extra-tools">
+          <button class="tbtn" id="btn-magic" title="Warna ajaib" aria-label="Warna ajaib"><span class="tool-symbol">✧</span><span>Ajaib</span></button>
+          <button class="tbtn" id="btn-clear" title="Mula semula" aria-label="Mula semula"><span class="tool-symbol">⟲</span><span>Reset</span></button>
+          <button class="tbtn save" id="btn-save" title="Simpan gambar" aria-label="Simpan gambar"><span class="tool-symbol">↓</span><span>Simpan</span></button>
+        </div>
       </div>
-      <div class="palrow">
-        <div id="palette"></div>
-        <label class="picker" title="Warna sendiri">
-          <input id="custom" type="color" value="#ff4d6d">
-          <span>🎨</span>
-        </label>
-      </div>
+      <div class="palrow"><span class="palette-label">PILIH WARNA</span><div id="palette" role="group" aria-label="Palet warna"></div><label class="picker" title="Warna sendiri"><input id="custom" type="color" value="#ed7190" aria-label="Warna sendiri"><span aria-hidden="true">＋</span></label></div>
+      <div class="tools-footnote"><span id="color-name">Merah jambu</span><span>♡ Setiap warna itu cantik</span></div>
     </div>
   </main>
-
-  <div id="toast" hidden></div>
+  <dialog id="complete-dialog"><div class="celebration-icon">★</div><span class="tag">KARYA SI KECIL</span><h2>Wah, cantiknya!</h2><p>Semua bahagian sudah berwarna.<br>Sedia untuk lukisan seterusnya?</p><button id="btn-next" class="primary-btn">Lukisan seterusnya →</button><button id="btn-done-save" class="secondary-btn">↓ Simpan gambar</button><button id="btn-continue" class="text-btn">Nak warna lagi</button></dialog>
+  <dialog id="clear-dialog"><div class="celebration-icon">⟲</div><h2>Mula semula?</h2><p>Jom warnakan lukisan ini sekali lagi.</p><button id="btn-confirm-clear" class="primary-btn">Ya, kosongkan</button><button id="btn-cancel-clear" class="text-btn">Sambung mewarna</button></dialog>
+  <div id="toast" role="status" hidden></div>
 </div>
-
-<script src="pages.js"></script>
-<script src="app.js"></script>
-</body>
-</html>
+<script src="pages.js?v=2"></script><script src="app.js?v=3"></script>
+</body></html>

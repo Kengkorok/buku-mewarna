@@ -9,16 +9,32 @@ Dibina sebagai alternatif kepada app "coloring page" di Play Store yang penuh ik
 
 ## Ciri
 
-- **Tekan untuk warnakan** (tap-to-fill) — 30 lukisan: haiwan, kenderaan, makanan, alam, robot, dino
-- **12 mandala** dijana secara matematik (setiap satu corak berbeza)
-- **Berus + pemadam** dengan slider saiz
-- **24 warna** + color picker untuk warna sendiri
-- **✨ Warna auto** — isi semua bahagian dengan warna rawak
-- **Undo / redo** (butang ↶ ↷ atau Ctrl+Z / Ctrl+Shift+Z)
-- **💾 Simpan** — muat turun PNG 1200×1200 + simpan dalam galeri dalam app (🖼️ Hasil Seni, 12 terakhir)
-- **Bunyi "pop" ASMR** setiap kali warnakan (boleh tutup dengan 🔊)
-- Sparkle effect pada setiap tap
-- UI mesra anak: butang besar, warna cerah, sesuai untuk telefon & tablet
+- **Berus marker bergrafik** — hujung berus ikut titik sentuhan sebenar.
+- **Warna terkunci dalam bahagian yang disentuh** — mata, garisan dan bahagian lain kekal terlindung walaupun jari melintas.
+- **Bantuan siap warna** — selepas kira-kira 62% bahagian disapu dengan warna yang sama, baki ruang diisi automatik.
+- **Isi warna + pemadam** — pemadam boleh membuang sapuan dan warna isi.
+- **32 lukisan** — termasuk boba dan burger; awan, bulan, telinga arnab, jalur ikan dan kek dikemaskan.
+- **Latar belakang boleh diwarnakan** — sentuh ruang kosong dengan berus, isi warna atau pemadam. Latar pilihan sendiri dan tidak diwajibkan untuk siap lukisan.
+- **24 warna + warna sendiri**, saiz berus boleh diubah.
+- **Kemajuan automatik** pada peranti/browser yang sama; kembali ke koleksi dan sambung semula.
+- **Undur / ulang** (40 tindakan), Ctrl+Z / Ctrl+Shift+Z.
+- **Skrin siap + lukisan seterusnya**, bunyi lembut dan konfeti.
+- **Simpan PNG 1200×1200** serta 12 hasil terakhir dalam galeri.
+- Layout telefon, tablet, desktop dan telefon melintang; tiada iklan atau login.
+
+Kemajuan dan galeri menggunakan localStorage browser. Alamat/origin berbeza mempunyai
+simpanan berasingan. Padam data browser juga memadam simpanan tersebut.
+
+## Preview tempatan
+
+Tiada build atau pakej diperlukan untuk menjalankan app:
+
+```bash
+python -m http.server 8450 --bind 0.0.0.0 --directory site
+```
+
+Buka `http://localhost:8450`. Pada telefon di rangkaian yang sama, gunakan
+`http://<IP-komputer>:8450`. Akses telefon bergantung pada firewall komputer.
 
 ## Deploy sendiri
 
@@ -48,25 +64,30 @@ buku-mewarna/
 ├── site/                   # app (statik, tiada build step)
 │   ├── index.html
 │   ├── style.css
-│   ├── app.js              # logik: fill, brush, undo, magic, save, mandala
-│   ├── pages.js            # 30 lukisan (dijana oleh tools/gen_pages.py)
+│   ├── app.js              # logik: fill, brush, latar, undo, magic, save
+│   ├── pages.js            # 32 lukisan (dijana oleh tools/gen_pages.py)
 │   └── manifest.webmanifest + icon.svg
 └── tools/
     ├── gen_pages.py        # penjana lukisan (SVG, region-based)
     ├── contact_sheet.py    # render semua page jadi 1 PNG untuk semak art
-    ├── verify_app.py       # ujian browser (playwright) — fill, brush, undo, save
+    ├── verify_app.cjs      # ujian browser Playwright — berus, latar, touch, simpan
+    ├── verify_app.py       # pembalut keserasian untuk menjalankan suite Node
     └── inspect_gallery.py  # debug layout galeri
 ```
 
 ## Cara lukisan berfungsi
 
-Setiap lukisan ialah satu SVG 400×400. Semua bentuk yang boleh diwarnakan ada `class="r"`
-(region) — app warnakan dengan set `fill` pada elemen itu (bukan flood-fill raster), jadi
-warna sentiasa tajam tanpa "halo" putih pada garis.
+Setiap lukisan ialah SVG 400×400. Bentuk `class="r"` ialah bahagian boleh warna,
+`class="d"` ialah garisan, dan `class="f"` ialah butiran hitam.
 
-- `class="r"` = region boleh warna (fill putih + garis hitam)
-- `class="d"` = garisan hiasan (mata, misai, garisan roda) — tak boleh warna
-- `class="f"` = titik hitam penuh
+App membina peta bahagian daripada SVG, mengikut susunan bentuk yang kelihatan.
+Berus dikunci pada bahagian awal sehingga jari diangkat. Peta ini turut mengecualikan
+bahagian di depan, mata dan garisan. Warna dilukis di kanvas berasingan dan garisan
+ditindih semula di atasnya. Transformasi skrin SVG digunakan untuk memadankan sentuhan
+dengan lukisan, termasuk selepas resize atau tukar orientasi.
+
+`tools/gen_pages.py` ialah sumber lukisan, `site/pages.js` ialah hasil janaan.
+Jangan edit hasil janaan sahaja kerana ia akan ditulis semula.
 
 ## Tambah / ubah lukisan
 
@@ -89,14 +110,21 @@ docker compose up -d --build
 
 ## Ujian
 
+Hidupkan server preview dahulu. Node.js dan Playwright diperlukan **untuk ujian sahaja**:
+
 ```bash
-pip3 install playwright && python3 -m playwright install chromium
-python3 tools/verify_app.py
+npm install --no-save playwright
+npx playwright install chromium
+node tools/verify_app.cjs
 ```
 
-Skrip ini buka app dalam Chromium headless, tekan region, lukis dengan berus, undo/redo,
-magic-fill, simpan (semak fail PNG turun + galeri dalam app), dan cetak JSON keputusan +
-screenshot dalam `shots/`.
+`BM_URL` boleh menetapkan URL lain dan `BM_OUTPUT` boleh menetapkan folder hasil.
+Suite ini membuat assertions untuk clipping, kedudukan nib, touch, bantuan siap warna,
+pemadam, undo/redo, pemulihan kemajuan, PNG 1200×1200, skrin siap, lukisan seterusnya,
+semua 32 lukisan, latar belakang, dan layout 320×568 hingga desktop serta landscape.
+Screenshot dan JSON keputusan disimpan dalam `shots/`.
+
+Ujian menggunakan emulasi Chromium; Safari/iPhone dan telefon fizikal masih perlu dicuba.
 
 ## Troubleshooting
 
